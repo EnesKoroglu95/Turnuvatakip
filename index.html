@@ -5,169 +5,86 @@
 <title>Turnuva Takip</title>
 
 <style>
-body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:#f5f5f5;
-}
+body{margin:0;font-family:Arial}
+.header{background:#c40000;padding:10px;text-align:center}
+.header span{background:#0a4db8;color:#fff;padding:6px 20px;border-radius:6px;font-weight:bold}
 
-/* ÜST BAR */
-.header{
-    background:#c40000;
-    padding:10px;
-    text-align:center;
-}
-.header span{
-    background:#0b4dbb;
-    color:#fff;
-    padding:6px 20px;
-    border-radius:6px;
-    font-weight:bold;
-}
-
-/* ARAMA */
-.search{
-    margin:20px;
-    text-align:center;
-}
-.search input{
-    padding:6px;
-    width:260px;
-}
-.search button{
-    padding:6px 15px;
-    cursor:pointer;
-}
-
-/* TABLO */
-table{
-    border-collapse:collapse;
-    margin:20px auto;
-    width:96%;
-    background:#fff;
-    table-layout:fixed;
-}
-
-th, td{
-    border:1px solid #000;
-    padding:6px;
-    font-size:13px;
-    text-align:center;
-    word-wrap:break-word;
-}
-
-th{
-    background:#e3f0ff;
-}
-
-/* Zebra */
-tbody tr:nth-child(odd){
-    background:#eaffea;
-}
-
-/* Sütunlar */
-.col-player{ width:240px; text-align:left; }
-.col-small{ width:80px; }
-
-.hidden{ display:none; }
+.controls{text-align:center;margin:20px}
+table{border-collapse:collapse;margin:20px auto;width:1100px;table-layout:fixed}
+th,td{border:1px solid #000;padding:4px;font-size:11px;text-align:center;word-wrap:break-word}
+th{background:#dce9f9}
+.name{width:160px;text-align:left;padding-left:6px}
+.green{background:#d9f6df}
+.hidden{display:none}
 </style>
 </head>
 
 <body>
 
 <div class="header">
-    <span>TURNUVA TAKİP</span>
+  <span>TURNOVA TAKİP</span>
 </div>
 
-<div class="search">
-    Oyuncu Ara:
-    <input type="text" id="playerInput" placeholder="Oyuncu Adı Soyadı">
-    <button onclick="searchPlayer()">Bul</button>
+<div class="controls">
+  Oyuncu Ara:
+  <input id="search" placeholder="Oyuncu Adı Soyadı">
+  <button onclick="ara()">Bul</button>
 </div>
 
-<table id="resultTable" class="hidden">
+<table id="tablo" class="hidden">
 <thead>
 <tr>
-    <th class="col-player">Karşılaşmalar</th>
-    <th class="col-small">Skor</th>
-    <th class="col-small">MP</th>
-    <th class="col-small">Alınan</th>
-    <th class="col-small">Gereken</th>
-    <th class="col-small">Averaj</th>
-    <th class="col-small">EYS1</th>
-    <th class="col-small">EYS2</th>
+  <th class="name">Karşılaşmalar</th>
+  <th>Skor</th>
+  <th>MP</th>
+  <th>Alınan</th>
+  <th>Gereken</th>
+  <th>Averaj</th>
+  <th>EYS1</th>
+  <th>EYS2</th>
 </tr>
 </thead>
-<tbody id="tableBody"></tbody>
+<tbody id="sonuc"></tbody>
 </table>
 
 <script>
-const CSV_URL =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vQ359o8xV7eUC94-244P9_A83mf5-iSYA7HNQq9sNyvk-w1iP8dCVokASwjLRaFBL-t0Hkf1wxFuq9u/pub?output=csv";
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ359o8xV7eUC94-244P9_A83mf5-iSYA7HNQq9sNyvk-w1iP8dCVokASwjLRaFBL-t0Hkf1wxFuq9u/pub?gid=1252443441&single=true&output=csv";
 
-let data = [];
+let veriler=[];
 
 fetch(CSV_URL)
-.then(r => r.text())
-.then(text => {
-    data = text.split("\n").map(r => r.split(","));
+.then(r=>r.text())
+.then(t=>{
+  veriler = t.split("\n").map(r=>r.split(","));
 });
 
-function normalize(t){
-    return t
-    .toUpperCase()
-    .replace(/İ/g,"I")
-    .replace(/Ğ/g,"G")
-    .replace(/Ü/g,"U")
-    .replace(/Ş/g,"S")
-    .replace(/Ö/g,"O")
-    .replace(/Ç/g,"C")
-    .trim();
-}
+function ara(){
+  const ad = document.getElementById("search").value.toUpperCase().trim();
+  const tbody = document.getElementById("sonuc");
+  tbody.innerHTML="";
+  let bulundu=false;
 
-function searchPlayer(){
-    const input = normalize(document.getElementById("playerInput").value);
-    if(!input) return;
-
-    let groupStart = -1;
-
-    for(let i=0;i<data.length;i++){
-        if(data[i][0]?.startsWith("G")){
-            for(let j=i+1;j<i+30 && j<data.length;j++){
-                if(normalize(data[j][1]||"").includes(input)){
-                    groupStart = i;
-                    break;
-                }
-            }
-        }
-        if(groupStart !== -1) break;
+  veriler.forEach((r,i)=>{
+    if(i===0) return;
+    if(r[1] && r[1].toUpperCase().includes(ad)){
+      bulundu=true;
+      const tr=document.createElement("tr");
+      if(tbody.children.length%2===0) tr.className="green";
+      tr.innerHTML=`
+        <td class="name">${r[1]}</td>
+        <td>${r[2]||""}</td>
+        <td>${r[3]||""}</td>
+        <td>${r[4]||""}</td>
+        <td>${r[5]||""}</td>
+        <td>${r[6]||""}</td>
+        <td>${r[7]||""}</td>
+        <td>${r[8]||""}</td>`;
+      tbody.appendChild(tr);
     }
+  });
 
-    if(groupStart === -1){
-        alert("Oyuncu bulunamadı");
-        return;
-    }
-
-    renderGroup(groupStart);
-}
-
-function renderGroup(start){
-    const body = document.getElementById("tableBody");
-    body.innerHTML = "";
-
-    for(let i=start+1;i<start+25 && i<data.length;i++){
-        if(data[i][0]?.toLowerCase().includes("sporcular")) break;
-
-        const tr = document.createElement("tr");
-        for(let c=1;c<=8;c++){
-            const td = document.createElement("td");
-            td.textContent = data[i][c] || "";
-            tr.appendChild(td);
-        }
-        body.appendChild(tr);
-    }
-
-    document.getElementById("resultTable").classList.remove("hidden");
+  document.getElementById("tablo").classList.toggle("hidden", !bulundu);
+  if(!bulundu) alert("Oyuncu bulunamadı");
 }
 </script>
 
