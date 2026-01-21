@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>G21 Grubu</title>
+<title>Turnuva Takibi</title>
 
 <style>
 body{
@@ -13,10 +13,18 @@ body{
 /* ÜST BAR */
 .header{
   background:#c40000;
-  padding:10px;
+  padding:8px;
   text-align:center;
 }
-.header span{
+.header .top{
+  color:#fff;
+  font-size:14px;
+  font-weight:bold;
+}
+.header .bottom{
+  margin-top:4px;
+}
+.header .bottom span{
   background:#0a4db8;
   color:#fff;
   padding:6px 18px;
@@ -24,7 +32,7 @@ body{
   font-weight:bold;
 }
 
-/* ANA ALAN */
+/* ANA */
 .wrapper{
   width:1200px;
   margin:20px auto;
@@ -32,7 +40,7 @@ body{
   gap:10px;
 }
 
-/* SOL G21 */
+/* SOL GRUP */
 .leftBox{
   width:140px;
   background:#e4effc;
@@ -51,28 +59,23 @@ table{
   border-collapse:collapse;
   table-layout:fixed;
 }
-
 th, td{
   border:1px solid #000;
   padding:5px;
   font-size:11px;
   text-align:center;
 }
-
 thead th{
   background:#e4effc;
 }
-
 .name{
-  width:200px;
+  width:220px;
   text-align:left;
   padding-left:6px;
 }
-
 .green{
   background:#e6faea;
 }
-
 .subhead th{
   background:#e4effc;
 }
@@ -90,18 +93,13 @@ thead th{
 <body>
 
 <div class="header">
-  <div style="color:#fff;font-size:14px;font-weight:bold;">
-    HANDİKAPLI 2. LONGONİ CUP
-  </div>
-  <div style="margin-top:4px;">
-    <span>Turnuva Takibi</span>
-  </div>
+  <div class="top">HANDİKAPLI 2. LONGONİ CUP</div>
+  <div class="bottom"><span>Turnuva Takibi</span></div>
 </div>
-
 
 <div class="wrapper">
 
-  <div class="leftBox">G21</div>
+  <div class="leftBox" id="groupBox">G21</div>
 
   <div style="flex:1">
 
@@ -119,12 +117,7 @@ thead th{
           <th>EYS2</th>
         </tr>
       </thead>
-      <tbody>
-        <tr class="green"><td class="name">HAKKI YILMAZ (60)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-        <tr><td class="name">ENES KÖROĞLU (40)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-        <tr class="green"><td class="name">BÜLENT SAKMANLI (50)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-        <tr><td class="name">ABDURRAHMAN DAYI (35)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-      </tbody>
+      <tbody id="matches"></tbody>
     </table>
 
     <br>
@@ -143,15 +136,61 @@ thead th{
           <th>Sıralama</th>
         </tr>
       </thead>
-      <tbody>
-        <tr><td class="name">HAKKI YILMAZ (60)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-        <tr><td class="name">BÜLENT SAKMANLI (50)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-        <tr><td class="name">AYHAN YILDIZ (43)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-      </tbody>
+      <tbody id="players"></tbody>
     </table>
 
   </div>
 </div>
+
+<script>
+const SHEET_URL =
+"https://opensheet.elk.sh/1s0fY_9-99WAT_G4XyPDdWeQnVThyjfCCC9IzqwZ662Y/TUR1";
+
+const CURRENT_GROUP = "G21"; // şimdilik sabit
+
+fetch(SHEET_URL)
+  .then(res => res.json())
+  .then(data => {
+    const groupData = data.filter(r => r.grup === CURRENT_GROUP);
+
+    // SOL KUTU
+    document.getElementById("groupBox").innerText = CURRENT_GROUP;
+
+    // KARŞILAŞMALAR
+    const matches = document.getElementById("matches");
+    matches.innerHTML = "";
+
+    groupData.forEach((r,i)=>{
+      matches.innerHTML += `
+        <tr class="${i%2===0?'green':''}">
+          <td class="name">${r.oyuncu}</td>
+          <td>${r.skor || ""}</td>
+          <td>${r.mac_puani || ""}</td>
+          <td>${r.alinan_sayi || ""}</td>
+          <td>${r.gereken_sayi || ""}</td>
+          <td>${r.averaj || ""}</td>
+          <td>${r.eys1 || ""}</td>
+          <td>${r.eys2 || ""}</td>
+        </tr>
+      `;
+    });
+
+    // SPORCULAR (TEKRARSIZ)
+    const players = [...new Set(groupData.map(r => r.oyuncu))];
+    const playersBody = document.getElementById("players");
+    playersBody.innerHTML = "";
+
+    players.forEach(p=>{
+      playersBody.innerHTML += `
+        <tr>
+          <td class="name">${p}</td>
+          <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+        </tr>
+      `;
+    });
+
+  });
+</script>
 
 </body>
 </html>
