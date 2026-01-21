@@ -1,163 +1,14 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-<meta charset="UTF-8">
-<title>Turnuva Takibi</title>
-
-<style>
-body{
-  margin:0;
-  font-family:Arial, Helvetica, sans-serif;
-}
-
-/* ÜST BAR */
-.header{
-  background:#c40000;
-  padding:8px;
-  text-align:center;
-}
-.header .top{
-  color:#fff;
-  font-size:14px;
-  font-weight:bold;
-}
-.header .bottom{
-  margin-top:4px;
-}
-.header .bottom span{
-  background:#0a4db8;
-  color:#fff;
-  padding:6px 18px;
-  border-radius:6px;
-  font-weight:bold;
-}
-
-/* ANA */
-.wrapper{
-  width:1200px;
-  margin:20px auto;
-  display:flex;
-  gap:10px;
-}
-
-/* SOL GRUP */
-.leftBox{
-  width:140px;
-  background:#e4effc;
-  border:1px solid #000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:80px;
-  font-weight:bold;
-  color:#0a63b8;
-}
-
-/* TABLOLAR */
-table{
-  width:100%;
-  border-collapse:collapse;
-  table-layout:fixed;
-}
-th, td{
-  border:1px solid #000;
-  padding:5px;
-  font-size:11px;
-  text-align:center;
-}
-thead th{
-  background:#e4effc;
-}
-.name{
-  width:220px;
-  text-align:left;
-  padding-left:6px;
-}
-.green{
-  background:#e6faea;
-}
-.subhead th{
-  background:#e4effc;
-}
-
-/* MOBİL */
-@media(max-width:1000px){
-  .wrapper{
-    width:100%;
-    overflow-x:auto;
-  }
-}
-</style>
-</head>
-
-<body>
-
-<div class="header">
-  <div class="top">HANDİKAPLI 2. LONGONİ CUP</div>
-  <div class="bottom"><span>Turnuva Takibi</span></div>
-</div>
-
-<div class="wrapper">
-
-  <div class="leftBox" id="groupBox">G21</div>
-
-  <div style="flex:1">
-
-    <!-- KARŞILAŞMALAR -->
-    <table>
-      <thead>
-        <tr>
-          <th class="name">Karşılaşmalar</th>
-          <th>Skor</th>
-          <th>Maç<br>Puanı</th>
-          <th>Alınan<br>Sayı</th>
-          <th>Alınması<br>Gereken Sayı</th>
-          <th>Averaj</th>
-          <th>EYS1</th>
-          <th>EYS2</th>
-        </tr>
-      </thead>
-      <tbody id="matches"></tbody>
-    </table>
-
-    <br>
-
-    <!-- SPORCULAR -->
-    <table>
-      <thead class="subhead">
-        <tr>
-          <th class="name">Sporcular</th>
-          <th>Toplam<br>Maç Puanı</th>
-          <th>Toplam<br>Alınan Sayı</th>
-          <th>Toplam<br>Gereken Sayı</th>
-          <th>Averaj</th>
-          <th>EYS1</th>
-          <th>EYS2</th>
-          <th>Sıralama</th>
-        </tr>
-      </thead>
-      <tbody id="players"></tbody>
-    </table>
-
-  </div>
-</div>
-
-<script>
-const SHEET_URL =
-"https://opensheet.elk.sh/1s0fY_9-99WAT_G4XyPDdWeQnVThyjfCCC9IzqwZ662Y/TUR1";
-
-const CURRENT_GROUP = "G21"; // şimdilik sabit
-
 fetch(SHEET_URL)
   .then(res => res.json())
   .then(data => {
+
     const groupData = data.filter(r => r.grup === CURRENT_GROUP);
 
     // SOL KUTU
     document.getElementById("groupBox").innerText = CURRENT_GROUP;
 
     // KARŞILAŞMALAR
-    const matches = document.getElementById("matches");
+    const matches = document.getElementById("matchesBody");
     matches.innerHTML = "";
 
     groupData.forEach((r,i)=>{
@@ -177,7 +28,7 @@ fetch(SHEET_URL)
 
     // SPORCULAR (TEKRARSIZ)
     const players = [...new Set(groupData.map(r => r.oyuncu))];
-    const playersBody = document.getElementById("players");
+    const playersBody = document.getElementById("playersBody");
     playersBody.innerHTML = "";
 
     players.forEach(p=>{
@@ -189,8 +40,4 @@ fetch(SHEET_URL)
       `;
     });
 
-  });
-</script>
-
-</body>
-</html>
+});
