@@ -5,74 +5,71 @@
 <title>Turnuva Takip</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f4f4;
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#f5f5f5;
 }
 
 /* ÜST BAR */
-.header {
-    background: #c40000;
-    padding: 10px;
-    text-align: center;
+.header{
+    background:#c40000;
+    padding:10px;
+    text-align:center;
 }
-.header span {
-    background: #0b4dbb;
-    color: white;
-    padding: 6px 20px;
-    border-radius: 6px;
-    font-weight: bold;
+.header span{
+    background:#0b4dbb;
+    color:#fff;
+    padding:6px 20px;
+    border-radius:6px;
+    font-weight:bold;
 }
 
 /* ARAMA */
-.search {
-    margin: 20px;
-    text-align: center;
+.search{
+    margin:20px;
+    text-align:center;
 }
-.search input {
-    padding: 6px;
-    width: 250px;
+.search input{
+    padding:6px;
+    width:260px;
 }
-.search button {
-    padding: 6px 15px;
-    cursor: pointer;
+.search button{
+    padding:6px 15px;
+    cursor:pointer;
 }
 
 /* TABLO */
-table {
-    border-collapse: collapse;
-    margin: 20px auto;
-    width: 95%;
-    background: white;
-    table-layout: fixed;
+table{
+    border-collapse:collapse;
+    margin:20px auto;
+    width:96%;
+    background:#fff;
+    table-layout:fixed;
 }
 
-th, td {
-    border: 1px solid black;
-    padding: 6px;
-    font-size: 13px;
-    text-align: center;
-    word-wrap: break-word;
+th, td{
+    border:1px solid #000;
+    padding:6px;
+    font-size:13px;
+    text-align:center;
+    word-wrap:break-word;
 }
 
-th {
-    background: #e3f0ff;
+th{
+    background:#e3f0ff;
 }
 
-/* ZEBRA */
-tbody tr:nth-child(odd) {
-    background: #eaffea;
+/* Zebra */
+tbody tr:nth-child(odd){
+    background:#eaffea;
 }
 
-/* SÜTUN GENİŞLİKLERİ */
-.col-player { width: 220px; text-align: left; }
-.col-small  { width: 80px; }
+/* Sütunlar */
+.col-player{ width:240px; text-align:left; }
+.col-small{ width:80px; }
 
-/* GİZLE */
-.hidden {
-    display: none;
-}
+.hidden{ display:none; }
 </style>
 </head>
 
@@ -108,53 +105,63 @@ tbody tr:nth-child(odd) {
 const CSV_URL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ359o8xV7eUC94-244P9_A83mf5-iSYA7HNQq9sNyvk-w1iP8dCVokASwjLRaFBL-t0Hkf1wxFuq9u/pub?output=csv";
 
-let rows = [];
+let data = [];
 
 fetch(CSV_URL)
 .then(r => r.text())
 .then(text => {
-    rows = text.split("\n").map(r => r.split(","));
+    data = text.split("\n").map(r => r.split(","));
 });
 
-function searchPlayer() {
-    const name = document.getElementById("playerInput").value.trim().toUpperCase();
-    if (!name) return;
+function normalize(t){
+    return t
+    .toUpperCase()
+    .replace(/İ/g,"I")
+    .replace(/Ğ/g,"G")
+    .replace(/Ü/g,"U")
+    .replace(/Ş/g,"S")
+    .replace(/Ö/g,"O")
+    .replace(/Ç/g,"C")
+    .trim();
+}
 
-    let foundGroup = null;
-    let startIndex = -1;
+function searchPlayer(){
+    const input = normalize(document.getElementById("playerInput").value);
+    if(!input) return;
 
-    for (let i = 0; i < rows.length; i++) {
-        if (rows[i][0]?.startsWith("G")) {
-            for (let j = i + 1; j < i + 30 && j < rows.length; j++) {
-                if (rows[j][1]?.toUpperCase().includes(name)) {
-                    foundGroup = rows[i][0];
-                    startIndex = i;
+    let groupStart = -1;
+
+    for(let i=0;i<data.length;i++){
+        if(data[i][0]?.startsWith("G")){
+            for(let j=i+1;j<i+30 && j<data.length;j++){
+                if(normalize(data[j][1]||"").includes(input)){
+                    groupStart = i;
                     break;
                 }
             }
         }
-        if (foundGroup) break;
+        if(groupStart !== -1) break;
     }
 
-    if (!foundGroup) {
+    if(groupStart === -1){
         alert("Oyuncu bulunamadı");
         return;
     }
 
-    renderGroup(startIndex);
+    renderGroup(groupStart);
 }
 
-function renderGroup(start) {
+function renderGroup(start){
     const body = document.getElementById("tableBody");
     body.innerHTML = "";
 
-    for (let i = start + 1; i < start + 22 && i < rows.length; i++) {
-        if (rows[i][0]?.startsWith("Sporcular")) break;
+    for(let i=start+1;i<start+25 && i<data.length;i++){
+        if(data[i][0]?.toLowerCase().includes("sporcular")) break;
 
         const tr = document.createElement("tr");
-        for (let c = 1; c <= 8; c++) {
+        for(let c=1;c<=8;c++){
             const td = document.createElement("td");
-            td.textContent = rows[i][c] || "";
+            td.textContent = data[i][c] || "";
             tr.appendChild(td);
         }
         body.appendChild(tr);
