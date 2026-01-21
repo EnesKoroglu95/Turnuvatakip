@@ -2,32 +2,87 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Turnuva Takip</title>
+<title>G21 Grubu</title>
 
 <style>
-body{margin:0;font-family:Arial,Helvetica,sans-serif;}
-.header{background:#c40000;padding:10px;text-align:center;}
-.header span{background:#0a4db8;color:#fff;padding:6px 18px;border-radius:6px;font-weight:bold;}
-
-.controls{text-align:center;margin:15px 0;}
-select,input,button{padding:6px;margin:3px;}
-
-.wrapper{max-width:1200px;margin:10px auto;padding:5px;}
-.g21box{
-  width:120px;height:120px;
-  background:#dce9f9;border:1px solid #000;
-  display:flex;align-items:center;justify-content:center;
-  font-size:48px;font-weight:bold;color:#0a63b8;
-  margin-bottom:10px;
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
 }
 
-table{width:100%;border-collapse:collapse;table-layout:fixed;}
-th,td{border:1px solid #000;padding:4px;font-size:11px;text-align:center;word-wrap:break-word;}
-th{background:#dce9f9;}
-.name{text-align:left;}
+/* ÜST BAR */
+.header{
+  background:#c40000;
+  padding:10px;
+  text-align:center;
+}
+.header span{
+  background:#0a4db8;
+  color:#fff;
+  padding:6px 18px;
+  border-radius:6px;
+  font-weight:bold;
+}
 
-@media(max-width:700px){
-  table{display:block;overflow-x:auto;}
+/* ANA ALAN */
+.wrapper{
+  width:1200px;
+  margin:20px auto;
+  display:flex;
+  gap:10px;
+}
+
+/* SOL G21 */
+.leftBox{
+  width:140px;
+  background:#e4effc;
+  border:1px solid #000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:80px;
+  font-weight:bold;
+  color:#0a63b8;
+}
+
+/* TABLOLAR */
+table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+
+th, td{
+  border:1px solid #000;
+  padding:5px;
+  font-size:11px;
+  text-align:center;
+}
+
+thead th{
+  background:#e4effc;
+}
+
+.name{
+  width:200px;
+  text-align:left;
+  padding-left:6px;
+}
+
+.green{
+  background:#e6faea;
+}
+
+.subhead th{
+  background:#e4effc;
+}
+
+/* MOBİL */
+@media(max-width:1000px){
+  .wrapper{
+    width:100%;
+    overflow-x:auto;
+  }
 }
 </style>
 </head>
@@ -35,90 +90,62 @@ th{background:#dce9f9;}
 <body>
 
 <div class="header">
-  <span id="title">TUR 1</span>
-</div>
-
-<div class="controls">
-  Grup:
-  <select id="groupSelect">
-    <option value="">Hepsi</option>
-    <script>
-      for(let i=1;i<=27;i++){
-        document.write(`<option value="G${i}">G${i}</option>`);
-      }
-    </script>
-  </select>
-
-  Oyuncu:
-  <input id="playerInput" placeholder="İsim yaz">
-  <button onclick="loadData()">Göster</button>
+  <span>G21 GRUBU</span>
 </div>
 
 <div class="wrapper">
-  <div class="g21box" id="groupBox">--</div>
 
-  <table>
-    <thead>
-      <tr>
-        <th class="name">Oyuncu</th>
-        <th>Rakip</th>
-        <th>Skor</th>
-        <th>MP</th>
-        <th>AS</th>
-        <th>GS</th>
-        <th>Av</th>
-      </tr>
-    </thead>
-    <tbody id="matches"></tbody>
-  </table>
+  <div class="leftBox">G21</div>
+
+  <div style="flex:1">
+
+    <!-- KARŞILAŞMALAR -->
+    <table>
+      <thead>
+        <tr>
+          <th class="name">Karşılaşmalar</th>
+          <th>Skor</th>
+          <th>Maç<br>Puanı</th>
+          <th>Alınan<br>Sayı</th>
+          <th>Alınması<br>Gereken Sayı</th>
+          <th>Averaj</th>
+          <th>EYS1</th>
+          <th>EYS2</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="green"><td class="name">HAKKI YILMAZ (60)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="name">ENES KÖROĞLU (40)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr class="green"><td class="name">BÜLENT SAKMANLI (50)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="name">ABDURRAHMAN DAYI (35)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <br>
+
+    <!-- SPORCULAR -->
+    <table>
+      <thead class="subhead">
+        <tr>
+          <th class="name">Sporcular</th>
+          <th>Toplam<br>Maç Puanı</th>
+          <th>Toplam<br>Alınan Sayı</th>
+          <th>Toplam<br>Gereken Sayı</th>
+          <th>Averaj</th>
+          <th>EYS1</th>
+          <th>EYS2</th>
+          <th>Sıralama</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="name">HAKKI YILMAZ (60)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="name">BÜLENT SAKMANLI (50)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="name">AYHAN YILDIZ (43)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+
+  </div>
 </div>
-
-<script>
-const DATA_URL = "https://opensheet.elk.sh/1s0fY_9-99WAT_G4XyPDdWeQnVThyjfCCC9IzqwZ662Y/TUR1";
-let allData = [];
-
-fetch(DATA_URL)
-  .then(res => res.json())
-  .then(json => allData = json);
-
-function loadData(){
-  const group = groupSelect.value;
-  const name = playerInput.value.toUpperCase();
-  matches.innerHTML = "";
-
-  let filtered = allData;
-
-  if(group){
-    filtered = filtered.filter(r => r.grup === group);
-    groupBox.innerText = group;
-  } else {
-    groupBox.innerText = "--";
-  }
-
-  if(name){
-    filtered = filtered.filter(r => r.oyuncu.toUpperCase().includes(name));
-  }
-
-  if(filtered.length === 0){
-    matches.innerHTML = "<tr><td colspan='7'>Kayıt bulunamadı</td></tr>";
-    return;
-  }
-
-  filtered.forEach(r=>{
-    matches.innerHTML += `
-      <tr>
-        <td class="name">${r.oyuncu}</td>
-        <td>${r.rakip}</td>
-        <td>${r.skor}</td>
-        <td>${r.mac_puani}</td>
-        <td>${r.alinan_sayi}</td>
-        <td>${r.gereken_sayi}</td>
-        <td>${r.averaj}</td>
-      </tr>
-    `;
-  });
-}
-</script>
 
 </body>
 </html>
