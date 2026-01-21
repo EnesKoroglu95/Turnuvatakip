@@ -6,81 +6,86 @@
 
 <style>
 body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:#fff;
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
 }
 
 /* ÜST BAR */
 .header{
-    background:#c80000;
-    padding:10px;
-    text-align:center;
+  background:#c40000;
+  padding:10px;
+  text-align:center;
 }
 .header span{
-    background:#0b5ed7;
-    color:#fff;
-    padding:6px 20px;
-    border-radius:6px;
-    font-weight:bold;
+  background:#0a4db8;
+  color:#fff;
+  padding:6px 18px;
+  border-radius:6px;
+  font-weight:bold;
 }
 
 /* KONTROLLER */
 .controls{
-    text-align:center;
-    margin:20px 0;
+  text-align:center;
+  margin:15px 0;
 }
 select, input{
-    padding:4px;
-    font-size:14px;
+  padding:4px;
 }
 
-/* ANA ALAN */
+/* SAYFA */
 .wrapper{
-    width:95%;
-    margin:auto;
-    display:flex;
+  width:1200px;
+  margin:20px auto;
+  display:flex;
+  gap:10px;
 }
 
 /* SOL GRUP */
-.groupBox{
-    width:130px;
-    background:#e6f0ff;
-    border:1px solid #000;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:48px;
-    font-weight:bold;
-    color:#0b5ed7;
+.g21box{
+  width:140px;
+  background:#dce9f9;
+  border:1px solid #000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:80px;
+  font-weight:bold;
+  color:#0a63b8;
 }
 
-/* TABLOLAR */
-.tables{
-    flex:1;
-    margin-left:10px;
-}
-
+/* TABLO */
 table{
-    width:100%;
-    border-collapse:collapse;
-    margin-bottom:15px;
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
 }
+
 th, td{
-    border:1px solid #000;
-    padding:5px;
-    font-size:13px;
-    text-align:center;
+  border:1px solid #000;
+  width:35px;
+  padding:4px;
+  font-size:11px;
+  text-align:center;
+  white-space:normal;
 }
-th{
-    background:#e6f0ff;
+
+thead th{
+  background:#dce9f9;
 }
+
 .name{
-    text-align:left;
-    padding-left:6px;
+  width:140px;
+  text-align:left;
+  padding-left:6px;
 }
-tbody tr:nth-child(odd) td{
-    background:#e8fff0;
+
+.green{
+  background:#d9f6df;
+}
+
+.subhead th{
+  background:#dce9f9;
 }
 </style>
 </head>
@@ -88,67 +93,67 @@ tbody tr:nth-child(odd) td{
 <body>
 
 <div class="header">
-    <span>G21 GRUBU</span>
+  <span id="title">G21 GRUBU</span>
 </div>
 
 <div class="controls">
-    Grup:
-    <select id="groupSelect">
-        <option value="">Seç</option>
-        <script>
-            for(let i=1;i<=27;i++){
-                document.write(`<option value="G${i}">G${i}</option>`);
-            }
-        </script>
-    </select>
+  Grup:
+  <select id="groupSelect">
+    <option value="">Seç</option>
+    <script>
+      for(let i=1;i<=27;i++){
+        document.write(`<option value="G${i}">G${i}</option>`);
+      }
+    </script>
+  </select>
 
-    &nbsp;&nbsp;
-    Oyuncu Ara:
-    <input type="text" id="playerInput" placeholder="Oyuncu Adı Soyadı">
-    <button onclick="search()">Bul</button>
+  &nbsp;&nbsp;
+  Oyuncu:
+  <input id="playerInput" placeholder="Oyuncu adı">
+  <button onclick="search()">Bul</button>
 </div>
 
 <div class="wrapper">
 
-    <div class="groupBox" id="groupBox">G--</div>
+<div class="g21box" id="groupBox">G--</div>
 
-    <div class="tables">
+<div style="flex:1">
 
-        <!-- KARŞILAŞMALAR -->
-        <table>
-            <thead>
-                <tr>
-                    <th>Karşılaşmalar</th>
-                    <th>Skor</th>
-                    <th>Maç Puanı</th>
-                    <th>Alınan Sayı</th>
-                    <th>Alınması Gereken Sayı</th>
-                    <th>Averaj</th>
-                    <th>EYS1</th>
-                    <th>EYS2</th>
-                </tr>
-            </thead>
-            <tbody id="matches"></tbody>
-        </table>
+<table>
+<thead>
+<tr>
+  <th class="name">Karşılaşmalar</th>
+  <th>Skor</th>
+  <th>Maç<br>Puanı</th>
+  <th>Alınan<br>Sayı</th>
+  <th>Alınması<br>Gereken Sayı</th>
+  <th>Averaj</th>
+  <th>EYS1</th>
+  <th>EYS2</th>
+</tr>
+</thead>
+<tbody id="matches"></tbody>
+</table>
 
-        <!-- SPORCULAR -->
-        <table>
-            <thead>
-                <tr>
-                    <th>Sporcular</th>
-                    <th>Toplam Maç Puanı</th>
-                    <th>Toplam Alınan Sayı</th>
-                    <th>Toplam Gereken Sayı</th>
-                    <th>Averaj</th>
-                    <th>EYS1</th>
-                    <th>EYS2</th>
-                    <th>Sıralama</th>
-                </tr>
-            </thead>
-            <tbody id="summary"></tbody>
-        </table>
+<br>
 
-    </div>
+<table>
+<thead class="subhead">
+<tr>
+  <th class="name">Sporcular</th>
+  <th>Toplam<br>Maç Puanı</th>
+  <th>Toplam<br>Alınan Sayı</th>
+  <th>Toplam<br>Gereken Sayı</th>
+  <th>Averaj</th>
+  <th>EYS1</th>
+  <th>EYS2</th>
+  <th>Sıralama</th>
+</tr>
+</thead>
+<tbody id="summary"></tbody>
+</table>
+
+</div>
 </div>
 
 <script>
@@ -160,52 +165,51 @@ let data = [];
 fetch(CSV_URL)
 .then(r=>r.text())
 .then(t=>{
-    data = t.split("\n").map(r=>r.split(","));
+  data = t.split("\n").map(r=>r.split(","));
 });
 
 function search(){
-    const group = document.getElementById("groupSelect").value;
-    const name = document.getElementById("playerInput").value.trim().toUpperCase();
+  const group = groupSelect.value;
+  const name = playerInput.value.toUpperCase();
 
-    if(!group || !name){
-        alert("Grup ve oyuncu adı seç");
-        return;
-    }
+  if(!group || !name){
+    alert("Grup ve oyuncu gir");
+    return;
+  }
 
-    document.getElementById("groupBox").innerText = group;
+  groupBox.innerText = group;
+  title.innerText = group + " GRUBU";
 
-    const matches = document.getElementById("matches");
-    const summary = document.getElementById("summary");
-    matches.innerHTML = "";
-    summary.innerHTML = "";
+  matches.innerHTML = "";
+  summary.innerHTML = "";
 
-    const filtered = data.filter(r =>
-        r[0] === group && r[1] && r[1].toUpperCase().includes(name)
-    );
+  const filtered = data.filter(r =>
+    r[0] === group && r[1].toUpperCase().includes(name)
+  );
 
-    if(filtered.length === 0){
-        alert("Oyuncu bu grupta bulunamadı");
-        return;
-    }
+  if(filtered.length === 0){
+    alert("Oyuncu bulunamadı");
+    return;
+  }
 
-    filtered.forEach(r=>{
-        matches.innerHTML += `
-        <tr>
-            <td class="name">${r[1]}</td>
-            <td>${r[2]||""}</td>
-            <td>${r[3]||""}</td>
-            <td>${r[4]||""}</td>
-            <td>${r[5]||""}</td>
-            <td>${r[6]||""}</td>
-            <td>${r[7]||""}</td>
-            <td>${r[8]||""}</td>
-        </tr>`;
-    });
+  filtered.forEach((r,i)=>{
+    matches.innerHTML += `
+    <tr class="${i%2==0?'green':''}">
+      <td class="name">${r[1]}</td>
+      <td>${r[2]||""}</td>
+      <td>${r[3]||""}</td>
+      <td>${r[4]||""}</td>
+      <td>${r[5]||""}</td>
+      <td>${r[6]||""}</td>
+      <td>${r[7]||""}</td>
+      <td>${r[8]||""}</td>
+    </tr>`;
+  });
 
-    summary.innerHTML = `
+  summary.innerHTML = `
     <tr>
-        <td class="name">${name}</td>
-        <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+      <td class="name">${name}</td>
+      <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
     </tr>`;
 }
 </script>
